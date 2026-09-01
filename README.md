@@ -1,140 +1,206 @@
-# Projeto-Final
+# ☁️ Projeto Final — Modernização de Arquitetura AWS
 
-O projeto proposto pela equipe da Compass UOL <img src="https://logospng.org/download/uol/logo-uol-icon-1024.png" alt="Ícone da UOL" width="15"> que consiste na migração de uma estrutura para o serviço AWS <img src="https://www.svgrepo.com/show/394021/aws.svg" alt="Ícone da AWS" width="15"> , a início de forma [**lift-and-shift**](https://www.ibm.com/br-pt/topics/lift-and-shift) e assim uma modernização posterior.
+> Projeto de arquitetura Cloud voltado à migração de uma aplicação legada para AWS, partindo de uma estratégia de lift-and-shift e avançando para uma arquitetura modernizada e conteinerizada.
 
+[![Status](https://img.shields.io/badge/status-projeto%20acadêmico-blue)](#status)
+[![Cloud](https://img.shields.io/badge/cloud-AWS-orange)](#arquitetura-proposta)
+[![Container](https://img.shields.io/badge/container-Kubernetes-326CE5)](#arquitetura-proposta)
+[![Database](https://img.shields.io/badge/database-MySQL-4479A1)](#arquitetura-proposta)
 
-# Documentação de Arquitetura AWS
+## Sobre o projeto
 
-Este repositório contém a documentação e os diagramas relacionados à transição de uma arquitetura legada para uma solução modernizada em AWS <img src="https://www.svgrepo.com/show/394021/aws.svg" alt="Ícone da AWS" width="15">.
+O **Projeto Final** documenta uma proposta de migração e modernização de uma arquitetura legada para serviços AWS.
 
-## Sumário
-- [Introdução](#introdução)
-- [Arquitetura Atual](#arquitetura-atual)
-- [Arquitetura Proposta](#arquitetura-proposta)
-- [Imagens de Referência](#imagens-de-referência)
-- [Cálculo de Custos](#cálculo-de-custos)
-- [Detalhamento da Modernização](#detalhamento-da-modernização)
-- [Documentações de Referência](#documentações-de-referência)
-- [Apresentação Final](#apresentação-final)
-- [Considerações Finais](#considerações-finais)
+A iniciativa foi desenvolvida no contexto da **Compass UOL**, com foco na análise da arquitetura existente, definição de uma arquitetura-alvo e avaliação dos serviços necessários para obter maior escalabilidade, resiliência, segurança e eficiência operacional.
 
-## Introdução
-Este documento detalha a transição de uma arquitetura legada para uma solução modernizada em AWS. A seguir, são apresentados os diagramas que ilustram a arquitetura atual e a proposta de modernização.
+## Objetivos
 
-## Arquitetura Atual
+- analisar uma arquitetura monolítica existente;
+- propor uma estratégia de migração para AWS;
+- utilizar serviços gerenciados sempre que apropriado;
+- melhorar escalabilidade e disponibilidade;
+- estruturar uma arquitetura conteinerizada;
+- incorporar mecanismos de segurança e observabilidade;
+- estimar os custos da solução;
+- documentar tecnicamente a arquitetura proposta.
 
-A arquitetura atual consiste em uma aplicação monolítica, com os seguintes componentes:
+## Arquitetura atual
 
-- **db01 (MySQL)**: Servidor de banco de dados.
-- **back01 (APIs)**: Servidor que hospeda as APIs.
-- **front01 (Web)**: Servidor que hospeda a aplicação web.
+A estrutura legada é composta por três elementos principais:
 
-### Processos de Migração
-Os serviços AWS utilizados para a migração incluem:
+```text
+db01    → MySQL
+back01  → APIs
+front01 → Aplicação Web
+```
 
-- **AWS DMS (Database Migration Service)**: Para migração do banco de dados MySQL.
-- **AWS Server Migration Service**: Para migração dos servidores front01 e back01.
+A migração inicial considera uma abordagem de **lift-and-shift**, com serviços AWS destinados à movimentação da infraestrutura e do banco de dados.
 
-#### Diagrama da Arquitetura Atual:
+### Componentes de migração
+
+- AWS Database Migration Service (DMS)
+- AWS Server Migration Service / recursos equivalentes de migração
+
+Diagrama da arquitetura atual:
+
 ![Arquitetura Atual](image1.png)
 
----
+## Arquitetura proposta
 
-## Arquitetura Proposta
+A arquitetura-alvo utiliza serviços gerenciados e uma camada de containers baseada em Kubernetes.
 
-Na arquitetura modernizada, a aplicação é executada em um ambiente altamente escalável e gerenciado na AWS. Os principais componentes são:
+```text
+Usuário
+   │
+   ▼
+Route 53
+   │
+   ▼
+CloudFront + WAF
+   │
+   ▼
+Load Balancer
+   │
+   ▼
+Amazon EKS
+   │        │
+   │        ├──► Amazon EFS
+   │        │
+   │        └──► Amazon RDS / MySQL
+   │
+   ▼
+CloudWatch
+```
 
-- **Amazon EKS (Kubernetes Gerenciado)**: Hospeda a aplicação em clusters Kubernetes.
-- **Amazon RDS**: Gerencia o banco de dados MySQL de forma escalável e resiliente.
-- **EFS (Elastic File System)**: Disponibiliza armazenamento compartilhado para as instâncias do backend.
-- **Network Load Balancer**: Faz a distribuição de tráfego para os pods em execução no cluster.
-- **CloudFront, WAF e Route 53**: Gerenciam a distribuição global, segurança e roteamento DNS.
+### Componentes principais
 
-#### Diagrama da Arquitetura Proposta:
+- **Amazon EKS:** execução e gerenciamento da aplicação conteinerizada;
+- **Amazon RDS:** banco de dados MySQL gerenciado;
+- **Amazon EFS:** armazenamento compartilhado e persistente;
+- **Elastic Load Balancing:** distribuição de tráfego;
+- **Amazon CloudFront:** distribuição de conteúdo;
+- **AWS WAF:** proteção da aplicação web;
+- **Amazon Route 53:** DNS e roteamento;
+- **AWS IAM:** controle de identidade e permissões;
+- **Amazon CloudWatch:** métricas, logs e observabilidade;
+- **AWS Backup:** estratégia de proteção dos dados;
+- **AWS CodePipeline / CodeBuild:** automação de CI/CD.
+
+Diagrama da arquitetura proposta:
+
 ![Arquitetura Proposta](image2.png)
 
+## Segurança
+
+A arquitetura proposta considera uma estratégia baseada em defesa em profundidade, combinando:
+
+- VPC com segmentação de rede;
+- subnets públicas e privadas;
+- Security Groups;
+- IAM e princípio do menor privilégio;
+- WAF na camada de aplicação;
+- isolamento do banco de dados;
+- backups automatizados;
+- monitoramento e logs.
+
+A implementação real deve ser validada conforme requisitos de segurança, compliance e operação do ambiente de destino.
+
+## Alta disponibilidade e resiliência
+
+A proposta utiliza serviços gerenciados e componentes distribuídos para reduzir pontos únicos de falha.
+
+Entre os mecanismos considerados estão:
+
+- EKS para execução escalável;
+- RDS com configuração Multi-AZ;
+- EFS para armazenamento compartilhado;
+- Load Balancer;
+- CloudFront;
+- mecanismos de backup;
+- observabilidade com CloudWatch.
+
+## CI/CD
+
+A arquitetura contempla automação do ciclo de entrega por meio de **AWS CodePipeline** e **AWS CodeBuild**, permitindo estruturar um fluxo de integração e entrega contínuas para a aplicação executada no ambiente Kubernetes.
+
+## Estimativa de custos
+
+O projeto também contempla estimativa de custos utilizando a **AWS Pricing Calculator**.
+
+A estimativa documentada originalmente foi de aproximadamente **US$ 1.213,90/mês**, considerando os componentes e premissas definidos naquele cenário.
+
+Esse valor não deve ser interpretado como preço atual de execução. Custos AWS variam conforme região, capacidade, tráfego, armazenamento, utilização e modelo de contratação.
+
+## Imagens e documentação
+
+O repositório contém diagramas e materiais utilizados para documentar a arquitetura.
+
+Arquivos de referência previstos no material original incluem os diagramas da arquitetura atual e proposta em formato visual/editável.
+
+## Apresentação
+
+O projeto também possui material de apresentação associado à entrega acadêmica original.
+
+## Tecnologias e serviços
+
+| Categoria | Tecnologia / Serviço |
+|---|---|
+| Cloud | AWS |
+| Containers | Kubernetes / Amazon EKS |
+| Banco | MySQL / Amazon RDS |
+| Storage | Amazon EFS |
+| CDN | Amazon CloudFront |
+| Segurança | AWS WAF / IAM / Security Groups |
+| DNS | Route 53 |
+| Balanceamento | Elastic Load Balancing |
+| Observabilidade | CloudWatch |
+| Backup | AWS Backup |
+| CI/CD | CodePipeline / CodeBuild |
+
+## Roadmap
+
+### Fase 1 — Migração
+
+- [x] Análise da arquitetura legada
+- [x] Estratégia de lift-and-shift
+- [x] Definição dos serviços AWS
+- [x] Documentação da arquitetura atual
+
+### Fase 2 — Modernização
+
+- [x] Arquitetura baseada em EKS
+- [x] RDS
+- [x] EFS
+- [x] Load Balancer
+- [x] CloudFront
+- [x] WAF
+- [x] Route 53
+- [x] CloudWatch
+- [x] Backup
+
+### Fase 3 — Evolução técnica
+
+- [ ] Infraestrutura como código
+- [ ] Pipeline CI/CD implementado
+- [ ] Estratégia formal de secrets
+- [ ] Testes automatizados
+- [ ] Observabilidade avançada
+- [ ] Revisão de custos baseada em workloads reais
+
+## Status
+
+📚 **Projeto acadêmico / arquitetura Cloud documentada.**
+
+O repositório funciona como registro técnico da proposta de migração e modernização desenvolvida durante o projeto.
+
+## Autor
+
+Desenvolvido por **Bruno Silva** no contexto dos estudos e atividades relacionadas a Cloud Computing e arquitetura AWS.
+
+GitHub: `eubruno-coder`
+
 ---
 
-## Imagens de Referência
-
-- **Arquitetura Atual:**
-[Diagrama no Drawio (Arquitetura Atual)](link_para_o_arquivo_atual.drawio)
-
-- **Arquitetura Proposta:**
-[Diagrama no Drawio (Arquitetura Proposta)](link_para_o_arquivo_proposta.drawio)
-
----
-
-## Cálculo de Custos
-
-Para estimar os custos associados a esta arquitetura, utilize a [AWS Pricing Calculator](https://calculator.aws/#/). Essa ferramenta permite simular os custos de execução dos serviços utilizados, considerando diferentes níveis de utilização e requisitos.
-
-### Resumo de Custos Estimados:
-
-- **Total Mensal Aproximado:** $1.213,90
-  - **Amazon EKS:** Gerenciamento de clusters Kubernetes com escalabilidade automatizada.
-  - **Amazon RDS (Multi-AZ):** Alta disponibilidade para banco de dados.
-  - **Amazon EFS:** Armazenamento elástico e compartilhado.
-  - **Elastic Load Balancer:** Distribuição de tráfego para alta disponibilidade.
-  - **AWS Backup:** Políticas automatizadas de backup.
-  - **CloudFront e WAF:** Distribuição de conteúdo com proteção contra ataques.
-
-Os custos detalhados podem variar conforme o uso específico de cada serviço, a região e as configurações aplicadas.
-
----
-
-## Detalhamento da Modernização
-
-### Estrutura Central:
-
-- **Amazon EKS (Elastic Kubernetes Service):**
-  Atua como o núcleo da modernização, gerenciando clusters Kubernetes para suportar aplicações conteinerizadas de forma escalável e eficiente.
-- **CI/CD com AWS CodePipeline e CodeBuild:**
-  Integração e entrega contínuas (CI/CD) automatizam o processo de desenvolvimento e implementação de código no EKS.
-
-### Armazenamento e Bancos de Dados:
-
-- **Amazon RDS com Multi-AZ:**
-  Garante alta disponibilidade e redundância geográfica para os bancos de dados.
-- **Amazon EFS (Elastic File System):**
-  Fornece armazenamento de arquivos elástico e acessível para aplicações.
-- **AWS Backup:**
-  Automatiza políticas de backup tanto para o EFS quanto para o RDS, com retenção de backups históricos.
-
-### Segurança:
-
-- **IAM (Identity and Access Management):**
-  Controle detalhado de permissões e segurança.
-- **AWS WAF (Web Application Firewall):**
-  Protege contra ataques a aplicações web.
-- **Grupos de Segurança e VPC:**
-  Subnets públicas e privadas para isolar recursos e restringir acessos.
-
-### Distribuição e Monitoramento:
-
-- **Elastic Load Balancing (ELB):**
-  Distribui o tráfego de rede para garantir alta disponibilidade.
-- **Amazon CloudFront:**
-  Rede de entrega de conteúdo (CDN) que oferece baixa latência para os usuários finais.
-- **Amazon CloudWatch:**
-  Monitora métricas e logs para garantir a observabilidade e identificar problemas rapidamente.
-
----
-
-## Documentações de Referência
-
-Para informações mais detalhadas e melhores práticas relacionadas à implementação e ao uso dos serviços mencionados, consulte as documentações oficiais da AWS:
-
-- [Amazon EKS Documentation](https://docs.aws.amazon.com/eks/) <img src="https://www.svgrepo.com/show/394021/aws.svg" alt="Ícone da AWS" width="15">
-- [Amazon RDS Documentation](https://docs.aws.amazon.com/rds/) <img src="https://www.svgrepo.com/show/394021/aws.svg" alt="Ícone da AWS" width="15">
-- [AWS Elastic Load Balancing Documentation](https://docs.aws.amazon.com/elasticloadbalancing/) <img src="https://www.svgrepo.com/show/394021/aws.svg" alt="Ícone da AWS" width="15">
-- [AWS Pricing Calculator Guide](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/calculator.html) <img src="https://www.svgrepo.com/show/394021/aws.svg" alt="Ícone da AWS" width="15">
-- [AWS Backup Documentation](https://docs.aws.amazon.com/backup/) <img src="https://www.svgrepo.com/show/394021/aws.svg" alt="Ícone da AWS" width="15">
-
----
-## Apresentação final
-Acesse a nossa apresentação [Aqui](https://github.com/brun-psilva/Projeto-Final/blob/be153328ca4cae8486028b8caaed6e05716929b5/PDF%20PB%20Final%20-%20Compass.pdf)
-
-## Considerações Finais
-
-A modernização para uma arquitetura baseada em Kubernetes e serviços gerenciados da AWS traz benefícios como escalabilidade, resiliência e eficiência operacional. Além disso, o uso de ferramentas como o AWS Pricing Calculator permite estimar custos com precisão e planejar o orçamento adequadamente. Este documento serve como referência para implementação e futuras melhorias.
+**Projeto:** Projeto Final — Modernização AWS  
+**Categoria:** Cloud / AWS / Arquitetura  
+**Status:** Projeto acadêmico documentado
