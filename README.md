@@ -7,6 +7,8 @@
 [![Container](https://img.shields.io/badge/container-Kubernetes-326CE5)](#arquitetura-proposta)
 [![Database](https://img.shields.io/badge/database-MySQL-4479A1)](#arquitetura-proposta)
 
+---
+
 ## Sobre o projeto
 
 O **Projeto Final** documenta uma proposta de migração e modernização de uma arquitetura legada para serviços AWS.
