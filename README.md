@@ -11,7 +11,7 @@
 
 ## Sobre o projeto
 
-O **Projeto Final** documenta uma proposta de migração e modernização de uma arquitetura legada para serviços AWS.
+O **Projeto Final** documenta uma proposta de migração e modernização de uma arquitetura legada para serviços AWS. Trata-se de uma entrega de arquitetura e documentação: os diagramas representam a arquitetura-alvo, não uma infraestrutura AWS comprovadamente provisionada e em operação.
 
 A iniciativa foi desenvolvida no contexto da **Compass UOL**, com foco na análise da arquitetura existente, definição de uma arquitetura-alvo e avaliação dos serviços necessários para obter maior escalabilidade, resiliência, segurança e eficiência operacional.
 
@@ -49,7 +49,7 @@ Diagrama da arquitetura atual:
 
 ## Arquitetura proposta
 
-A arquitetura-alvo utiliza serviços gerenciados e uma camada de containers baseada em Kubernetes.
+A arquitetura-alvo proposta utiliza serviços gerenciados e uma camada de containers baseada em Kubernetes. Os componentes abaixo descrevem o desenho técnico recomendado para o cenário acadêmico.
 
 ```text
 Usuário
@@ -168,17 +168,18 @@ O projeto também possui material de apresentação associado à entrega acadêm
 - [x] Definição dos serviços AWS
 - [x] Documentação da arquitetura atual
 
-### Fase 2 — Modernização
+### Fase 2 — Desenho da arquitetura modernizada
 
-- [x] Arquitetura baseada em EKS
-- [x] RDS
-- [x] EFS
-- [x] Load Balancer
-- [x] CloudFront
-- [x] WAF
-- [x] Route 53
-- [x] CloudWatch
-- [x] Backup
+- [x] Proposta de arquitetura baseada em EKS
+- [x] Seleção conceitual de RDS
+- [x] Seleção conceitual de EFS
+- [x] Desenho de balanceamento de carga
+- [x] Proposta de CloudFront e WAF
+- [x] Definição de Route 53
+- [x] Planejamento de observabilidade com CloudWatch
+- [x] Inclusão de estratégia de backup no desenho
+
+> Os itens marcados representam componentes definidos na documentação da arquitetura proposta; não comprovam provisionamento ou operação desses serviços na AWS.
 
 ### Fase 3 — Evolução técnica
 
